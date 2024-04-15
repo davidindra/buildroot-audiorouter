@@ -5,6 +5,12 @@ WORKDIR /buildroot
 # this .config was obtained by running `make raspberrypi3_defconfig` and 
 COPY buildroot.config .config
 
+COPY buildroot-overlay /buildroot-overlay
+
+RUN chmod 644 /buildroot-overlay/etc/ssh/sshd_config
+RUN chmod u+x /buildroot-overlay/etc/init.d/S02modules
+RUN chmod u+x /buildroot-overlay/etc/sysconfig/functions
+
 RUN make all
 
 FROM scratch AS export

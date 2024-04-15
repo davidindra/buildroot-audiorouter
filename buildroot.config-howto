@@ -2,9 +2,9 @@ make raspberrypi3_defconfig
 make menuconfig
  - Target pkgs -> Audio -> ALSA, ffmpeg, VLC
                -> Networking -> ntp,ntpd, openssh
-		 Shell -> bash, bash-completion, screen
+		 Shell -> bash, bash-completion, screen, dialog, sudo, which
 		 System tools -> htop
-		 Text editors -> nano
+		 Text editors -> nano, mc, less
  - System conf -> banner -> "audiorouter"
 		-> root password
 		-> timezone info, Europe/Prague
