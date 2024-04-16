@@ -20,6 +20,8 @@ RUN chmod u+x ./etc/init.d/S02modules
 RUN chmod u+x ./etc/init.d/S02procps
 RUN chmod u+x ./etc/init.d/S99firewall
 
+RUN chmod 644 ./etc/modprobe.d/focusrite-scarlett.conf
+
 RUN chmod 644 ./etc/network/interfaces
 RUN chmod 644 ./etc/ssh/sshd_config
 
