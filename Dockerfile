@@ -18,6 +18,8 @@ RUN chmod 644 ./etc/dhcp/dhcpd.conf
 
 RUN chmod u+x ./etc/init.d/S02modules
 RUN chmod u+x ./etc/init.d/S02procps
+RUN chmod u+x ./etc/init.d/S22expand-rootpart
+RUN chmod u+x ./etc/init.d/S23expand-rootfs
 RUN chmod u+x ./etc/init.d/S99firewall
 
 RUN chmod 644 ./etc/modprobe.d/focusrite-scarlett.conf
