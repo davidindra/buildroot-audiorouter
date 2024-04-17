@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\david\source\repos\buildroot-audiorouter\AudioRouterApp\..\buildroot-overlay\app\</_PublishTargetUrl>
+    <History>True|2024-04-18T00:04:56.5932169Z;True|2024-04-18T01:49:45.6158317+02:00;True|2024-04-18T01:41:31.3778788+02:00;True|2024-04-18T01:11:40.1876179+02:00;True|2024-04-18T01:01:57.3302247+02:00;True|2024-04-17T22:56:29.9000745+02:00;True|2024-04-17T22:52:37.1820159+02:00;True|2024-04-17T22:27:34.1985648+02:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

@@ -20,17 +20,21 @@ RUN chmod u+x ./etc/init.d/S02modules
 RUN chmod u+x ./etc/init.d/S02procps
 RUN chmod u+x ./etc/init.d/S22expand-rootpart
 RUN chmod u+x ./etc/init.d/S23expand-rootfs
+RUN chmod u+x ./etc/init.d/S60audiorouter
 RUN chmod u+x ./etc/init.d/S99firewall
 
 RUN chmod 644 ./etc/modprobe.d/focusrite-scarlett.conf
 
 RUN chmod 644 ./etc/network/interfaces
+RUN chmod 644 ./etc/nginx/nginx.conf
 RUN chmod 644 ./etc/ssh/sshd_config
 
 RUN chmod u+x ./etc/sysconfig/functions
 
 RUN chmod 644 ./etc/sysctl.conf
 RUN chmod 644 ./etc/wpa_supplicant.conf
+
+RUN chmod u+x ./app/AudioRouterApp
 
 # build the image
 

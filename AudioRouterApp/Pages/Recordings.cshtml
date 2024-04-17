@@ -1,0 +1,44 @@
+﻿@page "/recs"
+@model AudioRouterApp.Pages.RecordingsModel
+@{
+    ViewData["Title"] = "Nahrávky";
+
+    var recordings = StorageManager.GetRecordings();
+}
+@inject StorageManager StorageManager
+
+<div>
+    <h1 class="display-6">Přehled nahrávek</h1>
+    
+    <div class="container">
+        @foreach(var recording in recordings.OrderByDescending(r => r.LastModification))
+        {
+            <div class="row mb-1">
+                <div class="col-md-3">
+                    @recording.LastModification.ToString("dd.MM.yyyy HH:mm:ss")
+                </div>
+                <div class="col-md-1">
+                    @((recording.SizeBytes / 1024) < 1024 ? $"{recording.SizeBytes / 1024} kB" : $"{recording.SizeBytes/(1024*1024)} MB")
+                </div>
+                <div class="col-md-5">
+                    <b>@recording.FileName</b>
+                </div>
+                <div class="col-md-3">
+                    <a class="btn btn-primary" href="@Url.Page("Recordings", "Download", new { filename = recording.FileName })">Stáhnout</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <form method="post" style="display: inline;" onSubmit="return confirm('Opravdu chcete nahrávku smazat?') ">
+                        <input asp-for="RecordingToRemoveFileName" type="hidden" value="@recording.FileName" />
+                        <input class="btn btn-danger" type="submit" value="Smazat" />
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if(recordings.Count == 0)
+    {
+        <div>
+            <i>Žádné nahrávky nebyly nalezeny.</i>
+        </div>
+    }
+</div>
