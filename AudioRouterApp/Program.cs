@@ -6,7 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<RecordingController>();
+builder.Services.AddSingleton<StreamingController>();
 builder.Services.AddSingleton<StorageManager>();
+builder.Services.AddSingleton<ConversionController>();
+builder.Services.AddSingleton<TimeManager>();
 
 var app = builder.Build();
 

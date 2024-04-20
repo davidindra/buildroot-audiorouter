@@ -1,0 +1,11 @@
+TODO:
+
+ROFS? partitioning?
+connection conf (root ssh key, wifi pw)
+alsamixer params?
+device/channel selection...
+streaming?
+
+commands:
+cat /proc/asound/card0/stream0
+???: ffmpeg -listen 1 -f alsa -i plughw:0 -c:a aac -b:a 128k -ac 2 -f hls -hls_time 4 -hls_playlist_type event stream.m3u8

@@ -6,29 +6,45 @@
     var recordings = StorageManager.GetRecordings();
 }
 @inject StorageManager StorageManager
+@inject ConversionController ConversionController
 
 <div>
     <h1 class="display-6">Přehled nahrávek</h1>
     
     <div class="container">
-        @foreach(var recording in recordings.OrderByDescending(r => r.LastModification))
+        @foreach(var recording in recordings.OrderByDescending(r => r.FileName))
         {
-            <div class="row mb-1">
-                <div class="col-md-3">
+            <div class="row justify-content-between mb-1">
+                <div class="col-md-auto">
                     @recording.LastModification.ToString("dd.MM.yyyy HH:mm:ss")
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-auto">
                     @((recording.SizeBytes / 1024) < 1024 ? $"{recording.SizeBytes / 1024} kB" : $"{recording.SizeBytes/(1024*1024)} MB")
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-auto">
                     <b>@recording.FileName</b>
                 </div>
-                <div class="col-md-3">
-                    <a class="btn btn-primary" href="@Url.Page("Recordings", "Download", new { filename = recording.FileName })">Stáhnout</a>
+                <div class="col-md-auto">
+                    @if (ConversionController.State != ConversionState.Converting && recording.FileName.Contains(".wav"))
+                    {
+                        <a class="btn btn-sm btn-secondary" href="@Url.Page("Recordings", "Convert", new { filename = recording.FileName })">Převést do MP3</a>
+                    }
+                    else if(ConversionController.ConvertedFilename == recording.FileName)
+                    {
+                        <a class="btn btn-sm btn-secondary" href="@Url.Page("Recordings", "StopConvert")">Ukončit převod</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-secondary invisible" href="#">Ukončit převod</a>
+                    }
+                    &nbsp;&nbsp;&nbsp;
+                    <a class="btn btn-sm btn-primary" href="@Url.Page("Recordings", "Play", new { filename = recording.FileName })">Přehrát</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a class="btn btn-sm btn-primary" href="@Url.Page("Recordings", "Download", new { filename = recording.FileName })">Stáhnout</a>
                     &nbsp;&nbsp;&nbsp;
                     <form method="post" style="display: inline;" onSubmit="return confirm('Opravdu chcete nahrávku smazat?') ">
                         <input asp-for="RecordingToRemoveFileName" type="hidden" value="@recording.FileName" />
-                        <input class="btn btn-danger" type="submit" value="Smazat" />
+                        <input class="btn btn-sm btn-danger" type="submit" value="Smazat" />
                     </form>
                 </div>
             </div>

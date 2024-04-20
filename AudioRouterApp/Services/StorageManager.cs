@@ -4,6 +4,8 @@ namespace AudioRouterApp.Services
 {
     public class StorageManager
     {
+        const string IndexFileName = ".index";
+
         private readonly string baseDir;
 
         public StorageManager()
@@ -18,7 +20,7 @@ namespace AudioRouterApp.Services
 
         public ICollection<RecordingMetadata> GetRecordings()
         {
-            return Directory.GetFiles(baseDir).Select(f =>
+            return Directory.GetFiles(baseDir).Where(f => !f.Contains(IndexFileName)).Select(f =>
             {
                 var modified = File.GetLastWriteTime(f);
                 var size = new FileInfo(f).Length;
@@ -61,9 +63,35 @@ namespace AudioRouterApp.Services
 
         public string GetNewFilePath()
         {
-            var filename = $"rec-{DateTime.Now.ToString("yyyyMMdd-HHmmss")}.wav";
+            var validDate = DateTime.Now > new DateTime(2000, 1, 1);
+
+            var filename = validDate
+                ? $"rec-{GetIndexAndIncrement()}-{DateTime.Now.ToString("yyyyMMdd-HHmmss")}.wav"
+                : $"rec-{GetIndexAndIncrement()}.wav";
 
             return Path.Combine(baseDir, filename);
+        }
+
+        private string GetIndexAndIncrement()
+        {
+            var indexFilePath = Path.Combine(baseDir, IndexFileName);
+
+            if (File.Exists(indexFilePath))
+            {
+                var ix = uint.Parse(File.ReadAllText(indexFilePath));
+                File.WriteAllText(indexFilePath, (ix + 1).ToString());
+                return ix.ToString().PadLeft(4, '0');
+            }
+            else
+            {
+                File.WriteAllText(indexFilePath, 1.ToString());
+                return 0.ToString().PadLeft(4, '0');
+            }
+        }
+
+        public string GetFullPath(string filename)
+        {
+            return GetFilesystemPath(filename);
         }
     }
 

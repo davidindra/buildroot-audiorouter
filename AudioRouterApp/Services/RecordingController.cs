@@ -27,15 +27,13 @@ namespace AudioRouterApp.Services
             RecordingStart = DateTime.Now;
             RecordingEnd = DateTime.MinValue;
 
-            // sh -c 'cat testfile > testfile2'
-
             var filename = storageManager.GetNewFilePath();
 
             process = new Process();
             //process.StartInfo.FileName = "C:\\Program Files\\PSPad editor\\pspad.exe";
             //process.StartInfo.Arguments = "";
             process.StartInfo.FileName = "/usr/bin/arecord";
-            process.StartInfo.Arguments = " -D plughw:CARD=USB,DEV=0,SUBDEV=0 -f S32_LE -r 48000 -c 2 " + filename;
+            process.StartInfo.Arguments = "-D plughw:CARD=USB,DEV=0,SUBDEV=0 -f S32_LE -r 48000 -c 2 " + filename;
             process.StartInfo.UseShellExecute = false;
             process.EnableRaisingEvents = true;
             process.Exited += Process_Exited;

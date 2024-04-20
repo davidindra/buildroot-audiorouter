@@ -4,9 +4,17 @@
     ViewData["Title"] = "Ovládání";
 }
 @inject RecordingController RecordingController
+@inject StreamingController StreamingController
 
 <div>
-    <h1 class="display-6">Ovládání</h1>
+    @if(DateTime.Now < new DateTime(2000, 1, 1))
+    {
+        <div class="mt-3">
+            <a class="btn btn-success" href="#" onclick="synctime()">Synchronizovat čas</a>
+        </div>
+    }
+
+    <h1 class="display-6">Nahrávání</h1>
 
     <div class="mt-3">
         @if(RecordingController.State != RecordingState.Recording)
@@ -34,11 +42,56 @@
             <div>Délka záznamu: <b>@((RecordingController.RecordingEnd - RecordingController.RecordingStart).ToString(@"hh\:mm\:ss"))</b></div>
         }
     </div>
+
+    <h1 class="display-6 mt-3">Vysílání</h1>
+
+    <div class="mt-3">
+        @if (StreamingController.State != StreamingState.Streaming)
+        {
+            <a class="btn btn-success" href="#" onclick="stream()">Spustit vysílání</a>
+            <div class="mt-2">
+                <input type="text" id="target" value="192.168.2.10:1234" />
+            </div>
+        }
+        else
+        {
+            <a class="btn btn-danger" href="@Url.Page("Index", "StopStreaming")">Ukončit vysílání</a>
+        }
+    </div>
+
+    <div class="mt-3">
+        @if (StreamingController.StreamingStart != DateTime.MinValue)
+        {
+            <div class="mb-3"><b>VLC URL: </b><i>rtp://@@:1234</i></div>
+            <div>Začátek vysílání: <b>@StreamingController.StreamingStart.ToString("dd.MM.yyyy HH:mm:ss")</b></div>
+        }
+        @if (StreamingController.StreamingStart != DateTime.MinValue && StreamingController.StreamingEnd == DateTime.MinValue)
+        {
+            <div>Průběžná délka: <b>@((DateTime.Now - StreamingController.StreamingStart).ToString(@"hh\:mm\:ss"))</b></div>
+        }
+        @if (StreamingController.StreamingEnd != DateTime.MinValue)
+        {
+            <div>Konec vysílání: <b>@StreamingController.StreamingEnd.ToString("dd.MM.yyyy HH:mm:ss")</b></div>
+            <div>Délka vysílání: <b>@((StreamingController.StreamingEnd - StreamingController.StreamingStart).ToString(@"hh\:mm\:ss"))</b></div>
+        }
+    </div>
 </div>
 
+@section Scripts {
+    <script type="text/javascript">
+        setTimeout(function () {
+            location = ''
+        }, 5000);
 
-<script type="text/javascript">
-    setTimeout(function () {
-        location = ''
-    }, 5000)
-</script>
+        function synctime() {
+            var url = '@Html.Raw(Url.Page("Index", "SynchronizeDateTime", new { timestamp = "placeholder" }))';
+            location.href = url.replace("placeholder", new Date().getTime());
+        }
+
+        function stream() {
+            debugger;
+            var url = '@Html.Raw(Url.Page("Index", "StartStreaming", new { target = "placeholder" }))';
+            location.href = url.replace("placeholder", document.getElementById("target").value);
+        }
+    </script>
+}
